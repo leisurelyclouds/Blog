@@ -1,0 +1,17 @@
+﻿@page "/posts/{postName}"
+@inject HttpClient Http
+
+@((MarkupString)postBody)
+
+@code { 
+
+    [Parameter]
+    public string PostName { get; set; }
+    private string postBody;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var markdownString = await Http.GetStringAsync($"posts/{PostName}.md");
+        postBody = Markdig.Markdown.ToHtml(markdownString);
+    }
+}
